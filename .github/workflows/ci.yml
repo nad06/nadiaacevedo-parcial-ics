@@ -1,8 +1,3 @@
-- name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 name: CI - Nadia Acevedo
 
 on:
@@ -29,6 +24,11 @@ jobs:
 
       - name: Correr tests
         run: pytest test_saludos.py
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Notificar Discord
         if: always()
