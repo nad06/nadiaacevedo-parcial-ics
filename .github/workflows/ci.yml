@@ -1,0 +1,37 @@
+name: CI - Nadia Acevedo
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install pytest
+
+      - name: Correr tests
+        run: pytest test_saludos.py
+
+      - name: Notificar Discord
+        if: always()
+        uses: Ilshidur/action-discord@master
+        with:
+          args: |
+            ${{ job.status == 'success' && '✅ Build exitosa' || '❌ Build fallida' }}
+            Rama: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
